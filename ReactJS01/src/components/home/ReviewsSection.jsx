@@ -38,7 +38,7 @@ const REVIEWS = [
 const Stars = ({ count }) => (
   <div className="flex gap-0.5">
     {Array.from({ length: 5 }).map((_, i) => (
-      <svg key={i} className={`w-3.5 h-3.5 ${i < count ? 'text-[#D4AF37]' : 'text-[#2a3040]'}`} fill="currentColor" viewBox="0 0 24 24">
+      <svg key={i} className={`w-3 h-3 ${i < count ? 'text-[#C5B49E]' : 'text-[#1C1C1F]'}`} fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
       </svg>
     ))}
@@ -46,23 +46,25 @@ const Stars = ({ count }) => (
 );
 
 const ReviewCard = ({ review }) => (
-  <article className="luxury-card p-6 flex flex-col h-full">
-    <img
-      src={review.avatar}
-      alt={review.name}
-      className="w-12 h-12 rounded-full object-cover border-2 border-[#1e2430] mb-3"
-      onError={(e) => {
-        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(review.name)}&background=1e2430&color=D4AF37`;
-      }}
-    />
+  <article className="border border-[#18181A] bg-[#111112]/30 p-8 flex flex-col h-full hover:border-[#C5B49E] transition-all duration-300">
+    <div className="flex items-center gap-4 mb-6">
+      <img
+        src={review.avatar}
+        alt={review.name}
+        className="w-10 h-10 rounded-none object-cover border border-[#1C1C1F]"
+        onError={(e) => {
+          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(review.name)}&background=111112&color=C5B49E`;
+        }}
+      />
+      <div>
+        <p className="text-white font-medium text-[13px] tracking-wide">{review.name}</p>
+        <p className="text-[#52525B] text-[11px] font-light">{review.location}</p>
+      </div>
+    </div>
     <Stars count={review.rating} />
-    <p className="text-[#a8b0bc] text-[13px] leading-relaxed flex-1 my-4">
+    <p className="text-[#A1A1AA] text-[13px] font-light italic leading-relaxed flex-1 mt-4">
       &ldquo;{review.text}&rdquo;
     </p>
-    <div>
-      <p className="text-white font-semibold text-[13px]">{review.name}</p>
-      <p className="text-[#6b7280] text-[11px]">{review.location}</p>
-    </div>
   </article>
 );
 
@@ -73,19 +75,22 @@ const ReviewsSection = () => {
   const canNext = start + visible < REVIEWS.length;
 
   return (
-    <section className="luxury-section bg-[#05070a] border-t border-[#1e2430]">
+    <section className="luxury-section bg-[#080809] border-t border-[#18181A]">
       <div className="luxury-container">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="section-heading">Khách hàng nói gì</h2>
+        <div className="flex items-center justify-between mb-12">
+          <div className="space-y-2">
+            <span className="text-[10px] tracking-[0.25em] text-[#C5B49E] uppercase font-semibold">UY TÍN ĐƯỢC KHẲNG ĐỊNH</span>
+            <h2 className="section-heading">Ý Kiến Khách Hàng</h2>
+          </div>
           <a href="#" className="gold-link">
             Xem tất cả đánh giá
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </a>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <button
             type="button"
             onClick={() => setStart((s) => Math.max(0, s - 1))}
@@ -93,12 +98,12 @@ const ReviewsSection = () => {
             className="carousel-nav-btn"
             aria-label="Trước"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 flex-1 min-w-0">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-w-0">
             {REVIEWS.slice(start, start + visible).map((r) => (
               <ReviewCard key={r.id} review={r} />
             ))}
@@ -111,8 +116,8 @@ const ReviewsSection = () => {
             className="carousel-nav-btn"
             aria-label="Sau"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>

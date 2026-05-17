@@ -56,21 +56,17 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#05070a] border-t border-[#1e2430]">
-      <div className="max-w-[1280px] mx-auto px-6 py-16">
+    <footer className="bg-[#080809] border-t border-[#18181A]">
+      <div className="max-w-[1280px] mx-auto px-8 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
           {/* Col 1 — Brand */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2.5 mb-5">
-              <div className="w-9 h-9 bg-[#D4AF37] flex items-center justify-center text-black font-black text-lg rounded-sm">
-                V
-              </div>
-              <div className="flex flex-col leading-tight">
-                <span className="font-display text-white font-bold text-[15px]">AUTOVIP</span>
-                <span className="text-[#9CA3AF] text-[9px] tracking-[0.2em] uppercase">MOTORS</span>
-              </div>
+            <Link to="/" className="flex items-center gap-2 mb-5">
+              <span className="font-display text-white text-base tracking-[0.2em] font-light">
+                AUTOVIP <span className="text-[#C5B49E]">MOTORS</span>
+              </span>
             </Link>
-            <p className="text-[#6B7280] text-sm leading-relaxed mb-6">
+            <p className="text-[#A1A1AA] text-xs leading-relaxed mb-6 font-light">
               Hệ thống phân phối xe ô tô cao cấp hàng đầu. Cam kết sản phẩm chính hãng,
               giá minh bạch và dịch vụ chuyên nghiệp.
             </p>
@@ -79,10 +75,10 @@ const Footer = () => {
                 <a
                   key={id}
                   href="#"
-                  className="w-9 h-9 border border-[#2a2a2a] flex items-center justify-center text-[#6B7280] hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all rounded-sm"
+                  className="w-8 h-8 border border-[#1c1c1f] flex items-center justify-center text-[#A1A1AA] hover:border-[#FAFAFA] hover:text-[#FAFAFA] transition-all"
                   aria-label={label}
                 >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                     <SocialIcon id={id} />
                   </svg>
                 </a>
@@ -92,13 +88,13 @@ const Footer = () => {
 
           {/* Col 2 — Quick links */}
           <div>
-            <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase mb-5">
+            <h4 className="text-[10px] font-medium tracking-[0.18em] text-[#C5B49E] uppercase mb-5">
               Liên kết nhanh
             </h4>
-            <ul className="space-y-3 text-sm text-[#6B7280]">
+            <ul className="space-y-3 text-xs text-[#A1A1AA] font-light">
               {QUICK_LINKS.map(({ label, href }) => (
                 <li key={label}>
-                  <a href={href} className="hover:text-[#D4AF37] transition-colors">
+                  <a href={href} className="hover:text-white transition-colors">
                     {label}
                   </a>
                 </li>
@@ -108,13 +104,13 @@ const Footer = () => {
 
           {/* Col 3 — Customer care */}
           <div>
-            <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase mb-5">
+            <h4 className="text-[10px] font-medium tracking-[0.18em] text-[#C5B49E] uppercase mb-5">
               Chăm sóc khách hàng
             </h4>
-            <ul className="space-y-3 text-sm text-[#6B7280]">
+            <ul className="space-y-3 text-xs text-[#A1A1AA] font-light">
               {CUSTOMER_CARE.map((item) => (
                 <li key={item}>
-                  <a href="#" className="hover:text-[#D4AF37] transition-colors">
+                  <a href="#" className="hover:text-white transition-colors">
                     {item}
                   </a>
                 </li>
@@ -124,13 +120,13 @@ const Footer = () => {
 
           {/* Col 4 — Resources */}
           <div>
-            <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase mb-5">
+            <h4 className="text-[10px] font-medium tracking-[0.18em] text-[#C5B49E] uppercase mb-5">
               Tài nguyên
             </h4>
-            <ul className="space-y-3 text-sm text-[#6B7280]">
+            <ul className="space-y-3 text-xs text-[#A1A1AA] font-light">
               {RESOURCES.map((item) => (
                 <li key={item}>
-                  <a href="#" className="hover:text-[#D4AF37] transition-colors">
+                  <a href="#" className="hover:text-white transition-colors">
                     {item}
                   </a>
                 </li>
@@ -140,39 +136,40 @@ const Footer = () => {
 
           {/* Col 5 — Contact */}
           <div id="lien-he">
-            <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase mb-5">
+            <h4 className="text-[10px] font-medium tracking-[0.18em] text-[#C5B49E] uppercase mb-5">
               Liên hệ
             </h4>
-            <ul className="space-y-4 text-sm text-[#6B7280]">
+            <ul className="space-y-4 text-xs text-[#A1A1AA] font-light">
               <li className="flex items-start gap-3">
-                <svg className="w-4 h-4 mt-0.5 text-[#D4AF37] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                <svg className="w-4 h-4 mt-0.5 text-[#C5B49E] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span>123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</span>
               </li>
               <li className="flex items-center gap-3">
-                <svg className="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                <svg className="w-4 h-4 text-[#C5B49E] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                <a href="tel:190012345678" className="hover:text-[#D4AF37] transition-colors text-[#9CA3AF]">
+                <a href="tel:190012345678" className="hover:text-white transition-colors">
                   1900 1234 5678
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <svg className="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                <svg className="w-4 h-4 text-[#C5B49E] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <a href="mailto:info@autovip.vn" className="hover:text-[#D4AF37] transition-colors">
+                <a href="mailto:info@autovip.vn" className="hover:text-white transition-colors">
                   info@autovip.vn
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <svg className="w-4 h-4 mt-0.5 text-[#D4AF37] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 6v6l4 2" />
+                <svg className="w-4 h-4 mt-0.5 text-[#C5B49E] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <p className="text-[#9CA3AF] text-xs">Thứ 2 – Thứ 7: 8:00 – 18:00</p>
-                  <p className="text-[#9CA3AF] text-xs">Chủ nhật: 9:00 – 17:00</p>
+                  <p className="text-[#A1A1AA] text-xs">Thứ 2 – Thứ 7: 8:00 – 18:00</p>
+                  <p className="text-[#A1A1AA] text-xs">Chủ nhật: 9:00 – 17:00</p>
                 </div>
               </li>
             </ul>
@@ -180,14 +177,13 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="border-t border-[#1e2430]">
-        <div className="max-w-[1280px] mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-[11px] text-[#4B5563]">
+      <div className="border-t border-[#18181A]">
+        <div className="max-w-[1280px] mx-auto px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
+          <p className="text-[11px] text-[#52525B] font-light">
             © {year} AutoVIP Motors. Tất cả quyền được bảo lưu.
           </p>
-          <p className="text-[11px] text-[#6B7280] flex items-center gap-1">
-            Thiết kế cho người đam mê.
-            <span className="text-[#D4AF37] font-bold">V</span>
+          <p className="text-[11px] text-[#52525B] flex items-center gap-1 font-light tracking-widest">
+            DESIGNED FOR ENTHUSIASTS
           </p>
         </div>
       </div>

@@ -9,15 +9,15 @@ const formatVND = (price) => {
 };
 
 const BADGE_STYLES = {
-  certified: { label: 'Chứng nhận', bg: '#22C55E', color: '#fff' },
-  new:       { label: 'Xe mới về', bg: '#D4AF37', color: '#0a0a0a' },
-  value:     { label: 'Giá tốt nhất', bg: '#3B82F6', color: '#fff' },
+  certified: { label: 'Chứng nhận', bg: '#C5B49E', color: '#080809' },
+  new:       { label: 'Mới về', bg: '#FAFAFA', color: '#080809' },
+  value:     { label: 'Giá tốt nhất', bg: '#1C1C1F', color: '#FAFAFA' },
 };
 
 const SpecItem = ({ icon, label }) => (
   <div className="flex items-center gap-1.5 min-w-0">
-    <span className="text-[#D4AF37] flex-shrink-0">{icon}</span>
-    <span className="text-[#8b95a5] text-[11px] truncate">{label}</span>
+    <span className="text-[#C5B49E] flex-shrink-0">{icon}</span>
+    <span className="text-[#A1A1AA] text-[11px] font-light truncate">{label}</span>
   </div>
 );
 
@@ -56,22 +56,22 @@ const CarCardInventory = ({ product, index = 0 }) => {
   const badge = badgeKey ? BADGE_STYLES[badgeKey] : null;
 
   return (
-    <article className="car-card luxury-card overflow-hidden group flex flex-col">
+    <article className="car-card bg-[#111112] overflow-hidden group flex flex-col border border-[#1C1C1F]">
       {/* Image */}
-      <div className="relative bg-[#0a0c10] aspect-[16/11] overflow-hidden flex-shrink-0">
+      <div className="car-image-glow relative bg-[#080809] aspect-[16/11] overflow-hidden flex-shrink-0">
         <img
           src={
             product.primary_image ||
             'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80'
           }
           alt={product.name}
-          className="w-full h-full object-cover object-center group-hover:scale-[1.04] transition-transform duration-500"
+          className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-700 ease-out"
         />
 
         {/* Badge */}
         {badge && (
           <span
-            className="absolute top-3 left-3 text-[10px] font-bold px-2 py-1 uppercase tracking-wider z-10"
+            className="absolute top-3 left-3 text-[9px] font-semibold px-2 py-1 uppercase tracking-wider z-10"
             style={{ backgroundColor: badge.bg, color: badge.color }}
           >
             {badge.label}
@@ -82,32 +82,32 @@ const CarCardInventory = ({ product, index = 0 }) => {
         <button
           type="button"
           onClick={() => setLiked(!liked)}
-          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#05070a]/60 backdrop-blur-sm border border-[#2a3040] flex items-center justify-center hover:border-[#D4AF37] transition-colors z-10"
+          className="absolute top-3 right-3 w-8 h-8 bg-[#080809]/80 backdrop-blur-sm border border-[#1C1C1F] flex items-center justify-center hover:border-white transition-colors z-10 cursor-pointer"
           aria-label="Yêu thích"
         >
           <svg
-            className={`w-4 h-4 transition-colors ${liked ? 'text-[#D4AF37] fill-[#D4AF37]' : 'text-white fill-none'}`}
+            className={`w-4 h-4 transition-colors ${liked ? 'text-[#C5B49E] fill-[#C5B49E]' : 'text-white fill-none'}`}
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
         </button>
       </div>
 
       {/* Body */}
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="text-[13px] font-semibold text-white leading-snug mb-1.5 group-hover:text-[#D4AF37] transition-colors line-clamp-2">
+      <div className="p-5 flex flex-col flex-1">
+        <h3 className="text-[14px] font-normal tracking-wide text-white leading-snug mb-2.5 group-hover:text-[#C5B49E] transition-colors line-clamp-1">
           {product.name}
         </h3>
 
-        <p className="text-[#D4AF37] font-bold text-[18px] mb-3">
+        <p className="text-[#C5B49E] font-medium text-[16px] mb-4">
           {formatVND(product.price)}
         </p>
 
         {/* Specs */}
-        <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 py-3 border-t border-b border-[#1e2430] mb-3">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-3 py-4 border-t border-b border-[#1C1C1F] mb-5">
           <SpecItem icon={icons.mileage} label={product.mileage || '15.000 km'} />
           <SpecItem icon={icons.fuel} label={product.fuel_type || 'Xăng'} />
           <SpecItem icon={icons.trans} label={product.transmission || 'Tự động'} />
@@ -116,10 +116,10 @@ const CarCardInventory = ({ product, index = 0 }) => {
 
         <Link
           to={`/product/${product.slug}`}
-          className="gold-link mt-auto text-[12px]"
+          className="gold-link mt-auto text-[11px]"
         >
           Xem chi tiết
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </Link>
