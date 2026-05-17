@@ -17,9 +17,13 @@ const PUBLIC_API_PATHS = [
   '/v1/api/reset-password',
 ];
 
+const PUBLIC_API_PREFIXES = ['/v1/api/products', '/v1/api/categories'];
+
 const auth = (req, res, next) => {
   const path = normalizePath(req.originalUrl);
-  const isPublic = PUBLIC_API_PATHS.includes(path);
+  const isPublic =
+    PUBLIC_API_PATHS.includes(path) ||
+    PUBLIC_API_PREFIXES.some((prefix) => path.startsWith(prefix));
 
   if (isPublic) {
     return next();
@@ -32,6 +36,7 @@ const auth = (req, res, next) => {
       req.user = {
         email: decoded.email,
         name: decoded.name,
+        role: decoded.role || 'User',
         createdBy: 'hoidanit',
       };
       next();

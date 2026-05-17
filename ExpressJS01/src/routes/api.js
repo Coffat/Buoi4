@@ -8,8 +8,18 @@ const {
   getAccount,
   forgotPassword,
   resetPassword,
+  updateProfile,
 } = require('../controllers/userController');
+const {
+  getProducts,
+  getProductDetail,
+  getSimilarProducts,
+  createProduct,
+} = require('../controllers/productController');
+const { getCategories } = require('../controllers/categoryController');
 const auth = require('../middleware/auth');
+const authorize = require('../middleware/authorize');
+const validate = require('../middleware/validate');
 const delay = require('../middleware/delay');
 
 const routerAPI = express.Router();
@@ -39,5 +49,25 @@ routerAPI.post('/forgot-password', forgotPassword);
 routerAPI.post('/reset-password', resetPassword);
 routerAPI.get('/user', getUser);
 routerAPI.get('/account', delay, getAccount);
+routerAPI.put('/user/profile', updateProfile);
+
+routerAPI.get('/products', getProducts);
+routerAPI.get('/products/:slug', getProductDetail);
+routerAPI.get('/products/:slug/similar', getSimilarProducts);
+routerAPI.post(
+  '/products',
+  authorize('Admin'),
+  validate({
+    body: {
+      name: [{ required: true }, { type: 'string' }, { minLength: 2 }],
+      price: [{ required: true }, { type: 'number' }],
+      stock: [{ type: 'number' }],
+      status: [{ enum: ['normal', 'new', 'promotion', 'best_seller'] }],
+    },
+  }),
+  createProduct
+);
+
+routerAPI.get('/categories', getCategories);
 
 module.exports = routerAPI;
