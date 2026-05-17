@@ -67,6 +67,7 @@ const loginService = async (email, password) => {
     const payload = {
       email: user.email,
       name: user.name,
+      role: user.role,
     };
     const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
@@ -77,6 +78,7 @@ const loginService = async (email, password) => {
       user: {
         email: user.email,
         name: user.name,
+        role: user.role,
       },
     };
   } catch (error) {
@@ -180,10 +182,51 @@ const getUserService = async () => {
   }
 };
 
+const updateProfileService = async (email, name, newPassword) => {
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return { EC: 1, EM: 'Người dùng không tồn tại' };
+    }
+
+    const updates = {};
+    if (name) updates.name = name;
+    if (newPassword) {
+      const hashPassword = await bcrypt.hash(newPassword, saltRounds);
+      updates.password = hashPassword;
+    }
+
+    await user.update(updates);
+
+    // Generate new token with updated name
+    const payload = {
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
+    const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
+
+    return {
+      EC: 0,
+      access_token,
+      user: {
+        email: user.email,
+        name: user.name,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return { EC: 2, EM: 'Lỗi server' };
+  }
+};
+
 module.exports = {
   createUserService,
   loginService,
   getUserService,
   requestPasswordResetService,
   resetPasswordWithTokenService,
+  updateProfileService,
 };

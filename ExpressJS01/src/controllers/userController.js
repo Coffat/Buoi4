@@ -4,6 +4,7 @@ const {
   getUserService,
   requestPasswordResetService,
   resetPasswordWithTokenService,
+  updateProfileService,
 } = require('../services/userService');
 
 const createUser = async (req, res) => {
@@ -55,6 +56,19 @@ const resetPassword = async (req, res) => {
   return res.status(200).json({ message: 'Đặt lại mật khẩu thành công' });
 };
 
+const updateProfile = async (req, res) => {
+  const email = req.user?.email;
+  const { name, newPassword } = req.body;
+  if (!email) {
+    return res.status(401).json({ message: 'Không thể xác thực tài khoản' });
+  }
+  const result = await updateProfileService(email, name, newPassword);
+  if (result.EC !== 0) {
+    return res.status(400).json({ message: result.EM });
+  }
+  return res.status(200).json(result);
+};
+
 module.exports = {
   createUser,
   handleLogin,
@@ -62,4 +76,5 @@ module.exports = {
   getAccount,
   forgotPassword,
   resetPassword,
+  updateProfile,
 };
