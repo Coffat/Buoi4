@@ -1,5 +1,414 @@
-* {
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+/* ─── Design Tokens: Luxury Dark Automotive ─────────────────────── */
+@theme {
+  --color-surface-0: #0B0F14;
+  --color-surface-1: #111827;
+  --color-surface-2: #1F2937;
+  --color-surface-3: #374151;
+
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+
+  --color-gold: #D4AF37;
+  --color-gold-light: #F0D060;
+  --color-gold-dark: #B8960C;
+  --color-cta: #EAB308;
+
+  --color-success: #22C55E;
+  --color-danger: #EF4444;
+  --color-warning: #F59E0B;
+
+  --color-border: #374151;
+  --color-border-subtle: #1F2937;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-gold: 0 0 24px rgba(212, 175, 55, 0.2);
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────────── */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #05070a;
+  color: #F9FAFB;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* ─── Luxury home design system (mockup) ───────────────────────── */
+.luxury-page {
+  background-color: #05070a;
+  color: #f9fafb;
+}
+
+.luxury-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.luxury-section {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.luxury-card {
+  background-color: #0f1218;
+  border: 1px solid #1e2430;
+  border-radius: 6px;
+}
+
+.luxury-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #d4af37;
+  color: #0a0a0a;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.luxury-btn-primary:hover {
+  background-color: #c49b28;
+}
+
+.luxury-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: #f9fafb;
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 4px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.luxury-btn-ghost:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+.gold-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #d4af37;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.gold-link:hover {
+  color: #e8c55a;
+  gap: 0.5rem;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: #f9fafb;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.subsection-heading {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #f9fafb;
+  margin-bottom: 1.25rem;
+}
+
+.car-image-glow {
+  position: relative;
+}
+
+.car-image-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(212, 175, 55, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.carousel-nav-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid #2a3040;
+  background: #0f1218;
+  color: #d4af37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.carousel-nav-btn:hover:not(:disabled) {
+  border-color: #d4af37;
+  background: #1a1a0e;
+}
+
+.carousel-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ─── Typography utilities ───────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.heading-xl {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #F9FAFB;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Gold Accent Utilities ──────────────────────────────────────── */
+.text-gold {
+  color: #D4AF37;
+}
+.bg-gold {
+  background-color: #D4AF37;
+}
+.border-gold {
+  border-color: #D4AF37;
+}
+.hover\:text-gold:hover {
+  color: #D4AF37;
+}
+
+/* ─── Gold Underline Active Nav ──────────────────────────────────── */
+.nav-link-active {
+  color: #D4AF37 !important;
+  border-bottom-color: #D4AF37 !important;
+}
+
+/* ─── Swiper Custom Styles ───────────────────────────────────────── */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 48px !important;
+  height: 48px !important;
+  background: rgba(17, 24, 39, 0.9) !important;
+  border: 1px solid #374151 !important;
+  color: #D4AF37 !important;
+  border-radius: 0 !important;
+  transition: all 0.2s ease;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 14px !important;
+  font-weight: 700;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: #D4AF37 !important;
+  border-color: #D4AF37 !important;
+  color: #0B0F14 !important;
+}
+
+.swiper-pagination-bullet {
+  width: 32px !important;
+  height: 2px !important;
+  border-radius: 0 !important;
+  background: rgba(212, 175, 55, 0.3) !important;
+  opacity: 1 !important;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background: #D4AF37 !important;
+  width: 48px !important;
+}
+
+/* ─── Card Hover Transition ──────────────────────────────────────── */
+.car-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.car-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Gold Shimmer for Price ─────────────────────────────────────── */
+.price-text {
+  background: linear-gradient(135deg, #D4AF37 0%, #F0D060 50%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Section Divider ────────────────────────────────────────────── */
+.section-rule {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, #D4AF37, transparent);
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111827;
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* ─── Ant Design Overrides ───────────────────────────────────────── */
+.ant-notification {
+  z-index: 9999;
+}
+
+/* ─── Focus Ring ─────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #D4AF37;
+  outline-offset: 2px;
+}
+
+/* ─── Selection ──────────────────────────────────────────────────── */
+::selection {
+  background: rgba(212, 175, 55, 0.25);
+  color: #F9FAFB;
+}
+
+/* ─── Custom Ant Design Table Luxury Style ────────────────────────── */
+.custom-luxury-table {
+  background: #05070a !important;
+}
+
+.custom-luxury-table .ant-table {
+  background: #05070a !important;
+  color: #f9fafb !important;
+  font-size: 13px !important;
+}
+
+.custom-luxury-table .ant-table-thead > tr > th {
+  background: #0B0F14 !important;
+  color: #D4AF37 !important;
+  border-bottom: 1px solid #1e2430 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  font-size: 11px !important;
+}
+
+.custom-luxury-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #1e2430/50 !important;
+  background: #05070a !important;
+  color: #f9fafb !important;
+  padding: 16px 24px !important;
+  transition: all 0.3s ease !important;
+}
+
+.custom-luxury-table .ant-table-tbody > tr:hover > td {
+  background: #111827 !important;
+}
+
+.custom-luxury-table .ant-table-placeholder {
+  background: #05070a !important;
+  border-bottom: 1px solid #1e2430 !important;
+}
+
+.custom-luxury-table .ant-table-placeholder .ant-empty-description {
+  color: #8b95a5 !important;
+}
+
+/* Pagination Overrides */
+.custom-table-pagination .ant-pagination-item {
+  background: #0B0F14 !important;
+  border-color: #1e2430 !important;
+  border-radius: 0 !important;
+}
+
+.custom-table-pagination .ant-pagination-item a {
+  color: #8b95a5 !important;
+}
+
+.custom-table-pagination .ant-pagination-item-active {
+  border-color: #D4AF37 !important;
+  background: #D4AF37 !important;
+}
+
+.custom-table-pagination .ant-pagination-item-active a {
+  color: #0B0F14 !important;
+  font-weight: 700 !important;
+}
+
+.custom-table-pagination .ant-pagination-prev .ant-pagination-item-link,
+.custom-table-pagination .ant-pagination-next .ant-pagination-item-link {
+  background: #0B0F14 !important;
+  border-color: #1e2430 !important;
+  color: #8b95a5 !important;
+  border-radius: 0 !important;
+}
+
+.custom-table-pagination .ant-pagination-disabled .ant-pagination-item-link {
+  color: rgba(255, 255, 255, 0.15) !important;
+  border-color: #111827 !important;
+}
+
