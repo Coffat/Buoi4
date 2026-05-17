@@ -16,6 +16,9 @@ const sequelize = new Sequelize(
 const connection = async () => {
   await sequelize.authenticate();
   require('../models/user');
+  require('../models/category');
+  require('../models/product');
+  require('../models/productImage');
   await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
   console.log('Connected to database');
 };
