@@ -1,12 +1,14 @@
-import { Outlet } from 'react-router-dom';
-import Header from './components/layout/header.jsx';
+import { Outlet, useLocation } from 'react-router-dom';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 import axios from './util/axios.customize.js';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from './components/context/auth.context.jsx';
-import { Spin } from 'antd';
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
+  const location = useLocation();
+  const hasHero = location.pathname === '/' || location.pathname === '/inventory';
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -19,6 +21,7 @@ function App() {
             user: {
               email: res.email,
               name: res.name,
+              role: res.role || 'User',
             },
           });
         }
@@ -32,24 +35,12 @@ function App() {
   }, [setAuth, setAppLoading]);
 
   return (
-    <div>
-      {appLoading ? (
-        <div
-          style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          <Spin />
-        </div>
-      ) : (
-        <>
-          <Header />
-          <Outlet />
-        </>
-      )}
+    <div className="min-h-screen flex flex-col bg-[#0B0F14]">
+      <Navbar />
+      <main className="flex-1" style={hasHero ? {} : { paddingTop: '72px' }}>
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   );
 }
