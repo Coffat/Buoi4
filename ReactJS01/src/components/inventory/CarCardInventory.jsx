@@ -50,15 +50,23 @@ const icons = {
 
 const BADGE_TYPES = ['certified', 'new', 'value', null];
 
-const CarCardInventory = ({ product, index = 0 }) => {
+const CarCardInventory = ({ product, index = 0, listMode = false }) => {
   const [liked, setLiked] = useState(false);
   const badgeKey = BADGE_TYPES[index % 4];
   const badge = badgeKey ? BADGE_STYLES[badgeKey] : null;
 
   return (
-    <article className="car-card bg-[#111112] overflow-hidden group flex flex-col border border-[#1C1C1F]">
+    <article
+      className={`car-card bg-[#111112] overflow-hidden group border border-[#18181A] ${
+        listMode ? 'flex flex-row' : 'flex flex-col'
+      }`}
+    >
       {/* Image */}
-      <div className="car-image-glow relative bg-[#080809] aspect-[16/11] overflow-hidden flex-shrink-0">
+      <div
+        className={`car-image-glow relative bg-[#080809] overflow-hidden flex-shrink-0 ${
+          listMode ? 'w-full sm:w-[280px] aspect-[16/11] sm:aspect-auto sm:min-h-[180px]' : 'aspect-[16/11]'
+        }`}
+      >
         <img
           src={
             product.primary_image ||
@@ -97,10 +105,13 @@ const CarCardInventory = ({ product, index = 0 }) => {
       </div>
 
       {/* Body */}
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-[14px] font-normal tracking-wide text-white leading-snug mb-2.5 group-hover:text-[#C5B49E] transition-colors line-clamp-1">
+      <div className={`p-5 flex flex-col flex-1 ${listMode ? 'justify-center' : ''}`}>
+        <h3 className="text-[14px] font-normal tracking-wide text-white leading-snug mb-1 group-hover:text-[#C5B49E] transition-colors line-clamp-1">
           {product.name}
         </h3>
+        {product.brand && (
+          <p className="text-[#52525B] text-[11px] font-light mb-2 uppercase tracking-wider">{product.brand}</p>
+        )}
 
         <p className="text-[#C5B49E] font-medium text-[16px] mb-4">
           {formatVND(product.price)}

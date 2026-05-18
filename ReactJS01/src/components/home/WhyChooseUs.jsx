@@ -37,13 +37,17 @@ const FEATURES = [
   },
 ];
 
+import PageHeader from '../ui/PageHeader.jsx';
+
 const WhyChooseUs = () => (
   <section id="gioi-thieu" className="luxury-section bg-[#080809] border-t border-[#18181A]">
     <div className="luxury-container">
-      <div className="space-y-2 mb-12">
-        <span className="text-[10px] tracking-[0.25em] text-[#C5B49E] uppercase font-semibold">TẬP TRUNG VÀO TRẢI NGHIỆM</span>
-        <h2 className="section-heading">Tại sao chọn AutoVIP Motors</h2>
-      </div>
+      <PageHeader
+        eyebrow="Tập trung vào trải nghiệm"
+        title="Tại sao chọn"
+        highlight="AutoVIP Motors"
+        className="mb-12"
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {FEATURES.map((feat) => (
           <article key={feat.title} className="p-6 border border-[#18181A] bg-[#111112]/30 hover:border-[#C5B49E] transition-all duration-300 flex flex-col justify-between min-h-[220px] group">

@@ -24,6 +24,7 @@ const ProductCard = ({ product }) => {
       case 'new': return { text: 'Mới về', color: 'bg-[#22C55E] text-white' };
       case 'promotion': return discount > 0 ? { text: `-${discount}%`, color: 'bg-[#EF4444] text-white' } : null;
       case 'best_seller': return { text: 'Bán chạy', color: 'bg-[#D4AF37] text-[#0B0F14]' };
+      case 'featured': return { text: 'Nổi bật', color: 'bg-[#C5B49E] text-[#080809]' };
       default: return null;
     }
   })();

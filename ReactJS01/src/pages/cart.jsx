@@ -30,7 +30,7 @@ const CartPage = () => {
             </svg>
             <h2 className="text-[#c8cdd6] text-lg font-medium mb-2">Giỏ hàng trống</h2>
             <p className="text-[#8b95a5] text-sm mb-6">Bạn chưa chọn sản phẩm nào vào giỏ hàng.</p>
-            <Link to="/inventory" className="luxury-btn-primary inline-flex">
+            <Link to="/products" className="luxury-btn-primary inline-flex">
               Tiếp tục mua sắm
             </Link>
           </div>
@@ -125,7 +125,7 @@ const CartPage = () => {
                 >
                   Tiến hành thanh toán
                 </button>
-                <Link to="/inventory" className="w-full luxury-btn-ghost text-center block">
+                <Link to="/products" className="w-full luxury-btn-ghost text-center block">
                   Tiếp tục mua sắm
                 </Link>
               </div>

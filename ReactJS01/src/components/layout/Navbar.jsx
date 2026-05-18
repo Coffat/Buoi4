@@ -13,11 +13,17 @@ const Navbar = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const totalCartItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
+  const isProductsPage = location.pathname === '/products';
+  const showSolidNav = scrolled || isProductsPage;
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      if (!isProductsPage) setScrolled(window.scrollY > 20);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [isProductsPage]);
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
@@ -33,7 +39,7 @@ const Navbar = () => {
 
   const navLinks = [
     { label: 'TRANG CHỦ', to: '/', type: 'link' },
-    { label: 'KHO XE', to: '/inventory', type: 'link' },
+    { label: 'SẢN PHẨM', to: '/products', type: 'link' },
     { label: 'THƯƠNG HIỆU', to: '#thuong-hieu', type: 'anchor' },
     { label: 'TÀI CHÍNH', to: '#tai-chinh', type: 'anchor' },
     { label: 'GIỚI THIỆU', to: '#gioi-thieu', type: 'anchor' },
@@ -52,7 +58,7 @@ const Navbar = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#080809]/95 backdrop-blur-md border-b border-[#18181A]' : 'bg-transparent'
+        showSolidNav ? 'bg-[#080809]/95 backdrop-blur-md border-b border-[#18181A]' : 'bg-transparent'
       }`}
     >
       <div className="luxury-container flex items-center h-[72px] justify-between gap-6">

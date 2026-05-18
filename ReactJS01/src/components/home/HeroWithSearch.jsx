@@ -67,10 +67,10 @@ const HeroWithSearch = () => {
             {/* CTA buttons */}
             <div className="flex flex-wrap gap-4">
               <a href="#xe-noi-bat" className="luxury-btn-primary">
-                Xem kho xe
+                Xem xe nổi bật
               </a>
-              <a href="#dat-lich" className="luxury-btn-ghost">
-                Đặt lịch lái thử
+              <a href="/products" className="luxury-btn-ghost">
+                Xem sản phẩm
               </a>
             </div>
           </div>

@@ -5,25 +5,38 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-  function (config) {
+  (config) => {
     const token = localStorage.getItem('access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 instance.interceptors.response.use(
-  function (response) {
-    if (response && response.data !== undefined) return response.data;
-    return response;
+  (response) => {
+    const body = response?.data;
+    if (body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'success')) {
+      if (body.success === true) {
+        if (body.meta !== null && body.meta !== undefined) {
+          return { data: body.data, meta: body.meta };
+        }
+        return body.data;
+      }
+    }
+    return body;
   },
-  function (error) {
-    if (error?.response?.data) return error.response.data;
+  (error) => {
+    const body = error?.response?.data;
+    if (body?.success === false && body.error) {
+      const apiError = new Error(body.error.message || 'Yêu cầu thất bại');
+      apiError.code = body.error.code;
+      apiError.details = body.error.details;
+      apiError.status = error.response?.status;
+      return Promise.reject(apiError);
+    }
     return Promise.reject(error);
   }
 );

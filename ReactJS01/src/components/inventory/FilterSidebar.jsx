@@ -7,7 +7,7 @@ const TRANSMISSIONS = ['Tất cả Hộp số', 'Tự động', 'Số sàn', 'CV
 const LOCATIONS = ['Tất cả Địa điểm', 'Hà Nội', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ', 'TP.HCM'];
 
 const SectionLabel = ({ children }) => (
-  <h3 className="text-[10px] text-zinc-400 uppercase tracking-[0.18em] font-semibold mb-2.5">
+  <h3 className="form-label mb-2.5">
     {children}
   </h3>
 );
@@ -17,7 +17,7 @@ const SelectInput = ({ value, onChange, options }) => (
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-[#080809] border border-[#1D1D20] text-zinc-300 text-[13px] px-3.5 py-2.5 pr-8 rounded-none appearance-none focus:border-[#C5B49E] focus:outline-none cursor-pointer transition-colors font-light"
+      className="w-full bg-[#080809] border border-[#18181A] text-[#A1A1AA] text-[13px] px-3.5 py-2.5 pr-8 rounded-none appearance-none focus:border-[#C5B49E] focus:outline-none cursor-pointer transition-colors font-light"
     >
       {options.map((o) => (
         <option key={o} value={o} className="bg-[#111112] text-zinc-300">{o}</option>
@@ -90,10 +90,10 @@ const FilterSidebar = ({ filters, onChange, onReset, totalResults }) => {
 
   return (
     <aside className="w-full lg:w-[240px] flex-shrink-0">
-      <div className="luxury-card p-5 space-y-6 sticky top-24">
+      <div className="luxury-card p-5 space-y-6 sticky top-[calc(72px+7.5rem)] border border-[#18181A] bg-[#111112]/80">
         {/* Header */}
         <div className="flex items-center justify-between pb-3.5 border-b border-[#1D1D20]">
-          <h2 className="text-white uppercase tracking-wider font-medium text-[12px] font-sans">Bộ lọc</h2>
+          <h2 className="text-white uppercase tracking-wider font-medium text-[12px] font-sans">Lọc sản phẩm</h2>
           <button
             type="button"
             onClick={onReset}
@@ -236,7 +236,7 @@ const FilterSidebar = ({ filters, onChange, onReset, totalResults }) => {
           type="button"
           className="w-full luxury-btn-primary py-3"
         >
-          Hiển thị {totalResults} kết quả
+          Hiển thị {totalResults} sản phẩm
         </button>
       </div>
     </aside>

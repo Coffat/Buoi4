@@ -1,5 +1,10 @@
 import HeroWithSearch from '../components/home/HeroWithSearch';
-import FeaturedCars from '../components/home/FeaturedCars';
+import MemberVipBanner from '../components/home/MemberVipBanner';
+import {
+  PromotionsSection,
+  NewArrivalsSection,
+  FeaturedSection,
+} from '../components/home/ProductShowcaseSection';
 import CategoryBrandSection from '../components/home/CategoryBrandSection';
 import WhyChooseUs from '../components/home/WhyChooseUs';
 import ReviewsSection from '../components/home/ReviewsSection';
@@ -9,7 +14,10 @@ const HomePage = () => {
   return (
     <main className="luxury-page">
       <HeroWithSearch />
-      <FeaturedCars />
+      <MemberVipBanner />
+      <PromotionsSection />
+      <NewArrivalsSection />
+      <FeaturedSection />
       <CategoryBrandSection />
       <WhyChooseUs />
       <ReviewsSection />

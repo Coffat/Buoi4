@@ -6,7 +6,13 @@ export const fetchProducts = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const res = await getProductsApi(params);
-      return res;
+      if (!res || !Array.isArray(res.data)) {
+        return rejectWithValue('Lỗi tải sản phẩm');
+      }
+      return {
+        products: res.data,
+        ...res.meta,
+      };
     } catch (err) {
       return rejectWithValue(err.message || 'Lỗi tải sản phẩm');
     }
@@ -30,7 +36,7 @@ export const fetchSimilarProducts = createAsyncThunk(
   async (slug, { rejectWithValue }) => {
     try {
       const res = await getSimilarProductsApi(slug);
-      return res;
+      return Array.isArray(res) ? res : [];
     } catch (err) {
       return rejectWithValue(err.message || 'Lỗi tải sản phẩm tương tự');
     }
@@ -44,6 +50,9 @@ const productSlice = createSlice({
     total: 0,
     page: 1,
     totalPages: 1,
+    limit: 9,
+    hasNext: false,
+    hasPrev: false,
     detail: null,
     similar: [],
     loading: false,
@@ -64,14 +73,21 @@ const productSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload.products;
-        state.total = action.payload.total;
-        state.page = action.payload.page;
-        state.totalPages = action.payload.totalPages;
+        const payload = action.payload ?? {};
+        state.list = Array.isArray(payload.products) ? payload.products : [];
+        state.total = payload.total ?? 0;
+        state.page = payload.page ?? 1;
+        state.totalPages = payload.totalPages ?? 1;
+        state.limit = payload.limit ?? state.limit;
+        state.hasNext = payload.hasNext ?? false;
+        state.hasPrev = payload.hasPrev ?? false;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.list = [];
+        state.total = 0;
+        state.totalPages = 1;
       })
       .addCase(fetchProductDetail.pending, (state) => {
         state.detailLoading = true;

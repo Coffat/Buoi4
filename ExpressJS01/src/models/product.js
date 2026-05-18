@@ -66,7 +66,7 @@ const Product = sequelize.define(
       allowNull: true,
     },
     status: {
-      type: DataTypes.ENUM('normal', 'new', 'promotion', 'best_seller'),
+      type: DataTypes.ENUM('normal', 'new', 'promotion', 'best_seller', 'featured'),
       defaultValue: 'normal',
     },
     is_active: {

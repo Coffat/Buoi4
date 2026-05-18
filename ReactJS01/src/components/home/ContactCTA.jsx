@@ -3,12 +3,11 @@ const CTA_IMAGE =
 
 const ContactCTA = () => (
   <section id="dat-lich" className="bg-[#080809] border-t border-[#18181A]">
-    <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[420px]">
-      {/* Editorial Content */}
-      <div className="lg:col-span-7 flex flex-col justify-center px-8 sm:px-16 lg:px-24 py-16 space-y-6">
+    <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[380px]">
+      <div className="lg:col-span-7 flex flex-col justify-center px-8 sm:px-16 lg:px-24 py-14 space-y-5">
         <div>
-          <span className="text-[10px] tracking-[0.25em] text-[#C5B49E] uppercase font-semibold block mb-2">TRẢI NGHIỆM ĐẶC QUYỀN</span>
-          <h2 className="font-display text-3xl md:text-[2.25rem] font-light text-white leading-tight">
+          <span className="section-eyebrow block mb-2">Trải nghiệm đặc quyền</span>
+          <h2 className="section-title-block font-display font-light">
             Sẵn sàng trải nghiệm đẳng cấp?
           </h2>
         </div>

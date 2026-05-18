@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PageHeader from '../ui/PageHeader.jsx';
 
 const REVIEWS = [
   {
@@ -77,18 +78,14 @@ const ReviewsSection = () => {
   return (
     <section className="luxury-section bg-[#080809] border-t border-[#18181A]">
       <div className="luxury-container">
-        <div className="flex items-center justify-between mb-12">
-          <div className="space-y-2">
-            <span className="text-[10px] tracking-[0.25em] text-[#C5B49E] uppercase font-semibold">UY TÍN ĐƯỢC KHẲNG ĐỊNH</span>
-            <h2 className="section-heading">Ý Kiến Khách Hàng</h2>
-          </div>
-          <a href="#" className="gold-link">
-            Xem tất cả đánh giá
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-        </div>
+        <PageHeader
+          eyebrow="Uy tín được khẳng định"
+          title="Ý kiến"
+          highlight="khách hàng"
+          actionLabel="Xem tất cả đánh giá"
+          actionHref="#"
+          className="mb-12"
+        />
 
         <div className="flex items-center gap-6">
           <button

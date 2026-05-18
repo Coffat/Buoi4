@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 const QUICK_LINKS = [
-  { label: 'Kho xe', href: '#xe-noi-bat' },
+  { label: 'Sản phẩm', href: '/products' },
   { label: 'Thương hiệu', href: '#thuong-hieu' },
   { label: 'Tài chính', href: '#tai-chinh' },
   { label: 'Giới thiệu', href: '#gioi-thieu' },

@@ -6,6 +6,7 @@ import { addToCart } from '../store/slices/cartSlice';
 import ImageGallery from '../components/product/ImageGallery';
 import QuantitySelector from '../components/product/QuantitySelector';
 import SimilarProducts from '../components/product/SimilarProducts';
+import { getBrandLogoUrl } from '../util/brandAssets';
 import { notification } from 'antd';
 
 const formatPrice = (price) =>
@@ -84,10 +85,10 @@ const ProductDetail = () => {
           <h2 className="text-2xl font-bold text-white mb-2">Sản phẩm không tồn tại</h2>
           <p className="text-[#8b95a5] text-sm mb-8">Sản phẩm có thể đã bị xóa hoặc đường link không hợp lệ.</p>
           <Link
-            to="/inventory"
-            className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#0a0a0a] font-bold px-8 py-3 rounded hover:bg-[#F0D060] transition-colors text-[13px] tracking-wide uppercase"
+            to="/products"
+            className="luxury-btn-primary inline-flex"
           >
-            Xem kho xe
+            Xem sản phẩm
           </Link>
         </div>
       </div>
@@ -105,7 +106,10 @@ const ProductDetail = () => {
     new: { label: 'MỚI VỀ', class: 'bg-[#22C55E] text-white' },
     best_seller: { label: 'BÁN CHẠY', class: 'bg-[#D4AF37] text-[#0B0F14]' },
     promotion: { label: 'KHUYẾN MÃI', class: 'bg-[#EF4444] text-white' },
+    featured: { label: 'NỔI BẬT', class: 'bg-[#C5B49E] text-[#080809]' },
   };
+
+  const brandLogoUrl = getBrandLogoUrl(detail.brand);
 
   return (
     <div className="luxury-page min-h-screen">
@@ -116,10 +120,18 @@ const ProductDetail = () => {
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
-          <Link to="/inventory" className="hover:text-[#D4AF37] transition-colors">Kho xe</Link>
+          <Link to="/products" className="hover:text-[#C5B49E] transition-colors">Sản phẩm</Link>
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
+          {detail.brand && (
+            <>
+              <span className="text-[#9CA3AF]">{detail.brand}</span>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </>
+          )}
           {detail.category && (
             <>
               <span className="text-[#9CA3AF]">{detail.category.name}</span>
@@ -147,6 +159,19 @@ const ProductDetail = () => {
                   {statusMap[detail.status].label}
                 </span>
               )}
+              {detail.brand && (
+                <span className="inline-flex items-center gap-2 border border-[#1e2430] bg-[#0f1218] text-[#8b95a5] text-[10px] font-semibold px-3 py-1 rounded tracking-widest uppercase">
+                  {brandLogoUrl && (
+                    <img
+                      src={brandLogoUrl}
+                      alt=""
+                      className="w-4 h-4 object-contain opacity-90"
+                      loading="lazy"
+                    />
+                  )}
+                  {detail.brand}
+                </span>
+              )}
               {detail.category && (
                 <span className="border border-[#1e2430] bg-[#0f1218] text-[#8b95a5] text-[10px] font-semibold px-3 py-1 rounded tracking-widest uppercase">
                   {detail.category.name}
@@ -154,10 +179,37 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Car name */}
-            <h1 className="text-2xl md:text-4xl font-black text-white leading-tight mb-6">
-              {detail.name}
-            </h1>
+            {/* Car name + meta */}
+            <div className="mb-6">
+              <h1 className="text-2xl md:text-4xl font-black text-white leading-tight">
+                {detail.name}
+              </h1>
+              {(detail.brand || detail.category || detail.year) && (
+                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[#8b95a5] text-sm mt-3">
+                  {detail.brand && (
+                    <span className="inline-flex items-center gap-2">
+                      {brandLogoUrl && (
+                        <img
+                          src={brandLogoUrl}
+                          alt=""
+                          className="w-5 h-5 object-contain"
+                          loading="lazy"
+                        />
+                      )}
+                      <span className="text-[#D4AF37] font-medium">{detail.brand}</span>
+                    </span>
+                  )}
+                  {detail.brand && detail.category && (
+                    <span className="text-[#4b5563]" aria-hidden="true">·</span>
+                  )}
+                  {detail.category && <span>{detail.category.name}</span>}
+                  {detail.year && (detail.brand || detail.category) && (
+                    <span className="text-[#4b5563]" aria-hidden="true">·</span>
+                  )}
+                  {detail.year && <span>{detail.year}</span>}
+                </p>
+              )}
+            </div>
 
             {/* Price section */}
             <div className="bg-[#0f1218] border border-[#1e2430] rounded p-6 mb-8">

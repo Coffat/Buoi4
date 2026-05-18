@@ -1,27 +1,28 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import axios from './util/axios.customize.js';
+import { getMeApi } from './util/api.js';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from './components/context/auth.context.jsx';
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
   const location = useLocation();
-  const hasHero = location.pathname === '/' || location.pathname === '/inventory';
+  const hasHero = location.pathname === '/';
+  const isAuthRoute = ['/login', '/register', '/forgot-password', '/reset-password'].includes(location.pathname);
 
   useEffect(() => {
     const fetchAccount = async () => {
       setAppLoading(true);
       try {
-        const res = await axios.get('/v1/api/account');
-        if (res && !res.message) {
+        const user = await getMeApi();
+        if (user?.email) {
           setAuth({
             isAuthenticated: true,
             user: {
-              email: res.email,
-              name: res.name,
-              role: res.role || 'User',
+              email: user.email,
+              name: user.name,
+              role: user.role || 'User',
             },
           });
         }
@@ -37,10 +38,10 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0F14]">
       <Navbar />
-      <main className="flex-1" style={hasHero ? {} : { paddingTop: '72px' }}>
+      <main className={`flex-1 ${isAuthRoute ? 'auth-main' : ''}`} style={hasHero || isAuthRoute ? {} : { paddingTop: '72px' }}>
         <Outlet />
       </main>
-      <Footer />
+      {!isAuthRoute && <Footer />}
     </div>
   );
 }

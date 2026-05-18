@@ -44,149 +44,160 @@ const toPublicProduct = (product) => {
   return p;
 };
 
+const buildOrder = (sort, order) => {
+  const sortMap = {
+    created_at: 'createdAt',
+    price: 'price',
+    mileage: 'mileage',
+  };
+  const field = sortMap[sort] || 'createdAt';
+  const direction = order === 'asc' ? 'ASC' : 'DESC';
+  return [[field, direction]];
+};
+
 const getProducts = async ({
   status,
   category_slug,
   page = 1,
   limit = 8,
   search,
-  priceMin,
-  priceMax,
+  price_min,
+  price_max,
   brand,
-  yearMin,
-  yearMax,
+  year_min,
+  year_max,
   fuel_type,
   transmission,
-  mileageMax,
+  mileage_max,
   location,
   sort,
+  order,
 }) => {
-  try {
-    const where = { is_active: true };
-    if (status) where.status = status;
-    if (brand) where.brand = brand;
-    if (fuel_type) where.fuel_type = fuel_type;
-    if (transmission) where.transmission = transmission;
-    if (location) where.location = location;
+  const where = { is_active: true };
+  if (status) where.status = status;
+  if (brand) where.brand = brand;
+  if (fuel_type) where.fuel_type = fuel_type;
+  if (transmission) where.transmission = transmission;
+  if (location) where.location = location;
 
-    if (search) {
-      where.name = { [Op.like]: `%${search}%` };
-    }
-
-    if (priceMin || priceMax) {
-      where.price = {};
-      if (priceMin) where.price[Op.gte] = priceMin;
-      if (priceMax) where.price[Op.lte] = priceMax;
-    }
-
-    if (yearMin || yearMax) {
-      where.year = {};
-      if (yearMin) where.year[Op.gte] = yearMin;
-      if (yearMax) where.year[Op.lte] = yearMax;
-    }
-
-    if (mileageMax) {
-      where.mileage = { [Op.lte]: mileageMax };
-    }
-
-    if (category_slug) {
-      const category = await Category.findOne({
-        where: { slug: category_slug },
-      });
-      if (category) where.category_id = category.id;
-    }
-
-    let order = [['createdAt', 'DESC']];
-    if (sort) {
-      switch (sort) {
-        case 'Giá: Thấp đến Cao':
-          order = [['price', 'ASC']];
-          break;
-        case 'Giá: Cao đến Thấp':
-          order = [['price', 'DESC']];
-          break;
-        case 'Số km: Ít đến Nhiều':
-          order = [['mileage', 'ASC']];
-          break;
-        case 'Bán chạy nhất':
-          order = [['sold', 'DESC']];
-          break;
-        case 'Xem nhiều nhất':
-          order = [['views', 'DESC']];
-          break;
-        default:
-          order = [['createdAt', 'DESC']];
-          break;
-      }
-    }
-
-    const offset = (page - 1) * limit;
-    const { rows, count } = await Product.findAndCountAll({
-      where,
-      include: productIncludes(),
-      order,
-      offset,
-      limit,
-    });
-    return {
-      products: rows.map(toPublicProduct),
-      total: count,
-      page,
-      totalPages: Math.ceil(count / limit),
-    };
-  } catch (error) {
-    console.log(error);
-    return null;
+  if (search) {
+    where.name = { [Op.like]: `%${search}%` };
   }
+
+  if (price_min || price_max) {
+    where.price = {};
+    if (price_min) where.price[Op.gte] = price_min;
+    if (price_max) where.price[Op.lte] = price_max;
+  }
+
+  if (year_min || year_max) {
+    where.year = {};
+    if (year_min) where.year[Op.gte] = year_min;
+    if (year_max) where.year[Op.lte] = year_max;
+  }
+
+  if (mileage_max) {
+    where.mileage = { [Op.lte]: mileage_max };
+  }
+
+  if (category_slug) {
+    const category = await Category.findOne({
+      where: { slug: category_slug },
+    });
+    if (category) where.category_id = category.id;
+  }
+
+  const includes = productIncludes();
+  const total = await Product.count({
+    where,
+    include: includes,
+    distinct: true,
+    col: 'id',
+  });
+
+  const totalPages = total > 0 ? Math.ceil(total / limit) : 1;
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const offset = (safePage - 1) * limit;
+
+  const rows = await Product.findAll({
+    where,
+    include: includes,
+    order: buildOrder(sort, order),
+    offset,
+    limit,
+  });
+
+  return {
+    items: rows.map(toPublicProduct),
+    meta: {
+      page: safePage,
+      limit,
+      total,
+      totalPages,
+      hasNext: safePage < totalPages,
+      hasPrev: safePage > 1,
+    },
+  };
 };
 
 const getProductBySlug = async (slug) => {
-  try {
-    const product = await Product.findOne({
-      where: { slug, is_active: true },
-      include: productIncludes(),
-    });
-    if (!product) return null;
-    await product.increment('views', { by: 1 });
-    return toPublicProduct(product);
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  const product = await Product.findOne({
+    where: { slug, is_active: true },
+    include: productIncludes(),
+  });
+  if (!product) return null;
+  await product.increment('views', { by: 1 });
+  return toPublicProduct(product);
 };
 
 const getSimilarProducts = async (slug, limit = 4) => {
-  try {
-    const product = await Product.findOne({
-      where: { slug },
-      attributes: ['category_id', 'id'],
-    });
-    if (!product) return [];
-    const products = await Product.findAll({
-      where: {
-        category_id: product.category_id,
-        id: { [Op.ne]: product.id },
-        is_active: true,
-      },
-      include: productIncludes(),
-      limit,
-    });
-    return products.map(toPublicProduct);
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+  const product = await Product.findOne({
+    where: { slug },
+    attributes: ['category_id', 'id'],
+  });
+  if (!product) return [];
+  const products = await Product.findAll({
+    where: {
+      category_id: product.category_id,
+      id: { [Op.ne]: product.id },
+      is_active: true,
+    },
+    include: productIncludes(),
+    limit,
+  });
+  return products.map(toPublicProduct);
 };
 
 const createProduct = async (data) => {
-  try {
-    const slug = toSlug(data.name);
-    const product = await Product.create({ ...data, slug });
-    return toPublicProduct(product);
-  } catch (error) {
-    console.log(error);
-    return null;
+  const slug = toSlug(data.name);
+  const product = await Product.create({ ...data, slug });
+  const full = await Product.findByPk(product.id, {
+    include: productIncludes(),
+  });
+  return toPublicProduct(full);
+};
+
+const updateProductBySlug = async (slug, data) => {
+  const product = await Product.findOne({ where: { slug, is_active: true } });
+  if (!product) return null;
+
+  const updates = { ...data };
+  if (updates.name) {
+    updates.slug = toSlug(updates.name);
   }
+  await product.update(updates);
+
+  const full = await Product.findByPk(product.id, {
+    include: productIncludes(),
+  });
+  return toPublicProduct(full);
+};
+
+const deleteProductBySlug = async (slug) => {
+  const product = await Product.findOne({ where: { slug, is_active: true } });
+  if (!product) return false;
+  await product.update({ is_active: false });
+  return true;
 };
 
 module.exports = {
@@ -194,4 +205,6 @@ module.exports = {
   getProductBySlug,
   getSimilarProducts,
   createProduct,
+  updateProductBySlug,
+  deleteProductBySlug,
 };

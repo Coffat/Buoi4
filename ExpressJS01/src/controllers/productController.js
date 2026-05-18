@@ -1,68 +1,102 @@
+const { ok, created, fail, noContent } = require('../utils/apiResponse');
 const productService = require('../services/productService');
 
-const getProducts = async (req, res) => {
-  const {
-    status,
-    category_slug,
+const PRODUCT_STATUSES = ['normal', 'new', 'promotion', 'best_seller', 'featured'];
+
+const parseProductsQuery = (query) => {
+  const page = Math.max(1, parseInt(query.page, 10) || 1);
+  const limit = Math.min(50, Math.max(1, parseInt(query.limit, 10) || 8));
+
+  if (query.status && !PRODUCT_STATUSES.includes(query.status)) {
+    const err = new Error('status không hợp lệ');
+    err.status = 400;
+    err.code = 'VALIDATION_ERROR';
+    throw err;
+  }
+
+  const sortAllowed = ['created_at', 'price', 'mileage'];
+  if (query.sort && !sortAllowed.includes(query.sort)) {
+    const err = new Error('sort không hợp lệ');
+    err.status = 400;
+    err.code = 'VALIDATION_ERROR';
+    throw err;
+  }
+
+  if (query.order && !['asc', 'desc'].includes(query.order)) {
+    const err = new Error('order không hợp lệ');
+    err.status = 400;
+    err.code = 'VALIDATION_ERROR';
+    throw err;
+  }
+
+  return {
+    status: query.status,
+    category_slug: query.category_slug,
     page,
     limit,
-    search,
-    priceMin,
-    priceMax,
-    brand,
-    yearMin,
-    yearMax,
-    fuel_type,
-    transmission,
-    mileageMax,
-    location,
-    sort,
-  } = req.query;
+    search: query.search,
+    price_min: query.price_min ? parseInt(query.price_min, 10) : undefined,
+    price_max: query.price_max ? parseInt(query.price_max, 10) : undefined,
+    brand: query.brand,
+    year_min: query.year_min ? parseInt(query.year_min, 10) : undefined,
+    year_max: query.year_max ? parseInt(query.year_max, 10) : undefined,
+    fuel_type: query.fuel_type,
+    transmission: query.transmission,
+    mileage_max: query.mileage_max ? parseInt(query.mileage_max, 10) : undefined,
+    location: query.location,
+    sort: query.sort || 'created_at',
+    order: query.order || 'desc',
+  };
+};
 
-  const data = await productService.getProducts({
-    status,
-    category_slug,
-    page: parseInt(page) || 1,
-    limit: parseInt(limit) || 8,
-    search,
-    priceMin: priceMin ? parseInt(priceMin) : undefined,
-    priceMax: priceMax ? parseInt(priceMax) : undefined,
-    brand,
-    yearMin: yearMin ? parseInt(yearMin) : undefined,
-    yearMax: yearMax ? parseInt(yearMax) : undefined,
-    fuel_type,
-    transmission,
-    mileageMax: mileageMax ? parseInt(mileageMax) : undefined,
-    location,
-    sort,
-  });
-  if (!data) {
-    return res.status(500).json({ message: 'Lỗi server' });
+const getProducts = async (req, res) => {
+  const params = parseProductsQuery(req.query);
+  const result = await productService.getProducts(params);
+  if (!result) {
+    return fail(res, 500, 'INTERNAL_ERROR', 'Lỗi server');
   }
-  return res.status(200).json(data);
+  return ok(res, result.items, result.meta);
 };
 
 const getProductDetail = async (req, res) => {
   const { slug } = req.params;
   const product = await productService.getProductBySlug(slug);
   if (!product) {
-    return res.status(404).json({ message: 'Sản phẩm không tồn tại' });
+    return fail(res, 404, 'NOT_FOUND', 'Sản phẩm không tồn tại');
   }
-  return res.status(200).json(product);
+  return ok(res, product);
 };
 
 const getSimilarProducts = async (req, res) => {
   const { slug } = req.params;
   const products = await productService.getSimilarProducts(slug);
-  return res.status(200).json(products);
+  return ok(res, products);
 };
 
 const createProduct = async (req, res) => {
   const product = await productService.createProduct(req.body);
   if (!product) {
-    return res.status(400).json({ message: 'Tạo sản phẩm thất bại' });
+    return fail(res, 400, 'VALIDATION_ERROR', 'Tạo sản phẩm thất bại');
   }
-  return res.status(201).json(product);
+  return created(res, product, `/v1/api/products/${product.slug}`);
+};
+
+const updateProduct = async (req, res) => {
+  const { slug } = req.params;
+  const product = await productService.updateProductBySlug(slug, req.body);
+  if (!product) {
+    return fail(res, 404, 'NOT_FOUND', 'Sản phẩm không tồn tại');
+  }
+  return ok(res, product);
+};
+
+const deleteProduct = async (req, res) => {
+  const { slug } = req.params;
+  const deleted = await productService.deleteProductBySlug(slug);
+  if (!deleted) {
+    return fail(res, 404, 'NOT_FOUND', 'Sản phẩm không tồn tại');
+  }
+  return noContent(res);
 };
 
 module.exports = {
@@ -70,4 +104,6 @@ module.exports = {
   getProductDetail,
   getSimilarProducts,
   createProduct,
+  updateProduct,
+  deleteProduct,
 };

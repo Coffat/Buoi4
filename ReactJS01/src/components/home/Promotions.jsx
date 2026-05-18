@@ -1,1 +1,0 @@
-export { Promotions } from './NewArrivals';

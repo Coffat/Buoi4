@@ -16,6 +16,7 @@ import ForgotPasswordPage from './pages/forgot-password.jsx';
 import ResetPasswordPage from './pages/reset-password.jsx';
 import ProductDetail from './pages/product-detail.jsx';
 import { AuthWrapper } from './components/context/auth.context.jsx';
+import ProductsPage from './pages/products.jsx';
 import InventoryPage from './pages/inventory.jsx';
 import CartPage from './pages/cart.jsx';
 
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: 'forgot-password', element: <ForgotPasswordPage /> },
       { path: 'reset-password', element: <ResetPasswordPage /> },
       { path: 'product/:slug', element: <ProductDetail /> },
+      { path: 'products', element: <ProductsPage /> },
       { path: 'inventory', element: <InventoryPage /> },
       { path: 'cart', element: <CartPage /> },
     ],
