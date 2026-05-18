@@ -108,6 +108,12 @@ const getProducts = async ({
         case 'Số km: Ít đến Nhiều':
           order = [['mileage', 'ASC']];
           break;
+        case 'Bán chạy nhất':
+          order = [['sold', 'DESC']];
+          break;
+        case 'Xem nhiều nhất':
+          order = [['views', 'DESC']];
+          break;
         default:
           order = [['createdAt', 'DESC']];
           break;

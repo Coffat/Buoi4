@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { getProductsApi } from '../../util/api';
 import { AuthContext } from '../context/auth.context.jsx';
+import ProductCarousel from '../product/ProductCarousel';
 
 const formatPriceDisplay = (price, useUsd = false) => {
   if (useUsd) {
@@ -213,7 +214,8 @@ const FeaturedCars = () => {
   const [promotions, setPromotions] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
-  const [activeTab, setActiveTab] = useState('promotion'); // 'promotion' | 'new' | 'best_seller'
+  const [mostViewed, setMostViewed] = useState([]);
+  const [activeTab, setActiveTab] = useState('promotion'); // 'promotion' | 'new' | 'best_seller' | 'most_viewed'
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -221,15 +223,17 @@ const FeaturedCars = () => {
     setLoading(true);
     
     Promise.all([
-      getProductsApi({ status: 'promotion', limit: 3 }),
-      getProductsApi({ status: 'new', limit: 3 }),
-      getProductsApi({ status: 'best_seller', limit: 3 })
+      getProductsApi({ status: 'promotion', limit: 10 }),
+      getProductsApi({ status: 'new', limit: 10 }),
+      getProductsApi({ sort: 'Bán chạy nhất', limit: 10 }),
+      getProductsApi({ sort: 'Xem nhiều nhất', limit: 10 })
     ])
-      .then(([promoRes, newRes, bestRes]) => {
+      .then(([promoRes, newRes, bestRes, viewRes]) => {
         if (!cancelled) {
           setPromotions(promoRes?.products || []);
           setNewArrivals(newRes?.products || []);
           setBestSellers(bestRes?.products || []);
+          setMostViewed(viewRes?.products || []);
         }
       })
       .catch(() => {})
@@ -249,7 +253,10 @@ const FeaturedCars = () => {
     if (activeTab === 'new') {
       return newArrivals.length > 0 ? newArrivals : DEMO_CARS.new;
     }
-    return bestSellers.length > 0 ? bestSellers : DEMO_CARS.best_seller;
+    if (activeTab === 'best_seller') {
+      return bestSellers.length > 0 ? bestSellers : DEMO_CARS.best_seller;
+    }
+    return mostViewed.length > 0 ? mostViewed : DEMO_CARS.best_seller;
   };
 
   const displayList = getActiveList();
@@ -258,7 +265,8 @@ const FeaturedCars = () => {
   const tabs = [
     { key: 'promotion', label: 'Khuyến Mãi' },
     { key: 'new', label: 'Mới Nhất' },
-    { key: 'best_seller', label: 'Bán Chạy Nhất' }
+    { key: 'best_seller', label: 'Bán Chạy Nhất' },
+    { key: 'most_viewed', label: 'Xem Nhiều Nhất' }
   ];
 
   return (
@@ -314,13 +322,15 @@ const FeaturedCars = () => {
           </Link>
         </div>
 
-        {/* ── Product Grid ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading
-            ? [1, 2, 3].map((i) => <CarCardSkeleton key={i} />)
-            : displayList.map((p) => (
-                <CarCard key={p.id} product={p} priceAsUsd={isDemo} />
-              ))}
+        {/* ── Product Grid / Carousel ── */}
+        <div className="mt-8">
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => <CarCardSkeleton key={i} />)}
+            </div>
+          ) : (
+            <ProductCarousel products={displayList} />
+          )}
         </div>
       </div>
     </section>
